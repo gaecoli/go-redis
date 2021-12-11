@@ -3,20 +3,24 @@ package tcp
 import (
 	"context"
 	"fmt"
+	"github.com/gaecoli/interface/tcp"
+	"github.com/gaecoli/libs/logger"
 	"net"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
-	"go-redis/libs/logger"
+	"time"
 )
 
-type Handle interface {
-	Handle(ctx context.Context, conn net.Conn)
-	Close() error
+// Config stores tcp server properties
+type Config struct {
+	Address    string        `yaml:"address"`
+	MaxConnect uint32        `yaml:"max-connect"`
+	Timeout    time.Duration `yaml:"timeout"`
 }
 
-// 监听并提供服务，并在收到 closeChan 发来的关闭通知后关闭
+// ListenAndServe 监听并提供服务，并在收到 closeChan 发来的关闭通知后关闭
 func ListenAndServe(listener net.Listener, handler tcp.Handler, closeChan <-chan struct{}) {
 	// 监听关闭通知
 	go func() {
@@ -54,6 +58,7 @@ func ListenAndServe(listener net.Listener, handler tcp.Handler, closeChan <-chan
 	}
 	waitDone.Wait()
 }
+
 
 // ListenAndServeWithSignal 监听中断信号并通过 closeChan 通知服务器关闭
 func ListenAndServeWithSignal(cfg *Config, handler tcp.Handler) error {

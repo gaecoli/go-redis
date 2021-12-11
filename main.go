@@ -1,58 +1,63 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"io"
-	"log"
-	"net"
+	"github.com/gaecoli/config"
+	"github.com/gaecoli/libs/logger"
+	"github.com/gaecoli/tcp"
+	"os"
 )
 
-func ListenAndServer(address string) {
-	// bind listen address
-	listener, err := net.Listen("tcp", address)
-	if err != nil {
-		log.Fatal(fmt.Sprintf("listen err: %v", err))
-		return
-	}
+var banner = "Hello GuYu"
 
-
-	defer func(listener net.Listener) {
-		err := listener.Close()
-		if err != nil {
-			log.Fatal(fmt.Sprintf("close err: %v", err))
-		}
-	}(listener)
-
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			log.Fatal(fmt.Sprintf("accept err: %v", err))
-		}
-
-		go Handle(conn)
-	}
-
+var defaultProperties = &config.ServerProperties{
+	Bind: "0.0.0.0",
+	Port: 6666,
+	AppendOnly: false,
+	AppendFilename: "",
+	MaxClients: 1000,
 }
 
-func Handle(conn net.Conn) {
-	render := bufio.NewReader(conn)
-	for {
-		msg, err := render.ReadString('\n')
-		if err != nil {
-			if err == io.EOF {
-				log.Println("connection close")
-			} else {
-				log.Println(err)
-			}
-			return
-		}
+func fileExists(filename string) bool {
+	info, err := os.Stat(filename)
+	return err == nil && !info.IsDir()
+}
 
-		b := [] byte(msg)
-		conn.Write(b)
-	}
+type Handler struct {
+	a string
+}
+
+func TestHandler() *tcp.EchoHandler {
+	a := "This is a test"
+	print(a)
+	return nil
 }
 
 func main() {
-	ListenAndServer(":9999")
+	print(banner)
+	logger.Setup(&logger.Settings{
+		Path: "logs",
+		Name: "go-redis",
+		Ext: "log",
+		TimeFormat: "2021-12-11",
+	})
+
+	configFilename := os.Getenv("CONFIG")
+	if configFilename == "" {
+		if fileExists("go-redis.conf") {
+			config.SetupConfig("go-redis.conf")
+		} else {
+			config.Properties = defaultProperties
+		}
+	} else {
+		config.SetupConfig(configFilename)
+	}
+
+	err := tcp.ListenAndServeWithSignal(&tcp.Config{
+		Address: fmt.Sprintf("%s:%d", config.Properties.Bind, config.Properties.Port),
+	}, TestHandler())
+	if err != nil {
+		logger.Error(err)
+	}
+
 }
