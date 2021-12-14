@@ -4,9 +4,9 @@ package tcp
 import (
 	"bufio"
 	"context"
-	"github.com/gaecoli/libs/logger"
-	"github.com/gaecoli/libs/sync/atomic"
-	"github.com/gaecoli/libs/sync/wait"
+	"github.com/gaecoli/utils/logger"
+	"github.com/gaecoli/utils/sync/atomic"
+	"github.com/gaecoli/utils/sync/wait"
 	"io"
 	"net"
 	"sync"
