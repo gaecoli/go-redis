@@ -1,6 +1,5 @@
 package tcp
 
-
 import (
 	"bufio"
 	"context"

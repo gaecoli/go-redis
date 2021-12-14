@@ -1,6 +1,5 @@
 package atomic
 
-
 import "sync/atomic"
 
 // Boolean is a boolean value, all actions of it is atomic

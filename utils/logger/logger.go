@@ -12,20 +12,20 @@ import (
 )
 
 type Settings struct {
-	Path string `yaml:"path"`
-	Name string `yaml:"name"`
-	Ext string `yaml:"ext"`
+	Path       string `yaml:"path"`
+	Name       string `yaml:"name"`
+	Ext        string `yaml:"ext"`
 	TimeFormat string `yaml:"time_format"`
 }
 
 var (
-	logFile *os.File
-	defaultPrefix = ""
+	logFile            *os.File
+	defaultPrefix      = ""
 	defaultCallerDepth = 2
-	logger *log.Logger
-	mu sync.Mutex
-	logPrefix = ""
-	levelFlags = []string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
+	logger             *log.Logger
+	mu                 sync.Mutex
+	logPrefix          = ""
+	levelFlags         = []string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
 )
 
 type logLevel int
@@ -58,7 +58,7 @@ func Setup(settings *Settings) {
 	logger = log.New(mw, defaultPrefix, flags)
 }
 
-func setPrefix(level logLevel)  {
+func setPrefix(level logLevel) {
 	_, file, line, ok := runtime.Caller(defaultCallerDepth)
 	if ok {
 		logPrefix = fmt.Sprintf("[%s] [%s:%d] ", levelFlags[level], filepath.Base(file), line)
@@ -108,4 +108,3 @@ func Fatal(v ...interface{}) {
 	setPrefix(FATAL)
 	logger.Fatalln(v...)
 }
-

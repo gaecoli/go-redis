@@ -59,7 +59,6 @@ func ListenAndServe(listener net.Listener, handler tcp.Handler, closeChan <-chan
 	waitDone.Wait()
 }
 
-
 // ListenAndServeWithSignal 监听中断信号并通过 closeChan 通知服务器关闭
 func ListenAndServeWithSignal(cfg *Config, handler tcp.Handler) error {
 	closeChan := make(chan struct{})

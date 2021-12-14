@@ -3,19 +3,19 @@ package main
 import (
 	"fmt"
 	"github.com/gaecoli/config"
-	"github.com/gaecoli/utils/logger"
 	"github.com/gaecoli/tcp"
+	"github.com/gaecoli/utils/logger"
 	"os"
 )
 
 var banner = "Hello GuYu"
 
 var defaultProperties = &config.ServerProperties{
-	Bind: "0.0.0.0",
-	Port: 6666,
-	AppendOnly: false,
+	Bind:           "0.0.0.0",
+	Port:           6666,
+	AppendOnly:     false,
 	AppendFilename: "",
-	MaxClients: 1000,
+	MaxClients:     1000,
 }
 
 func fileExists(filename string) bool {
@@ -36,9 +36,9 @@ func TestHandler() *tcp.EchoHandler {
 func main() {
 	print(banner)
 	logger.Setup(&logger.Settings{
-		Path: "logs",
-		Name: "go-redis",
-		Ext: "log",
+		Path:       "logs",
+		Name:       "go-redis",
+		Ext:        "log",
 		TimeFormat: "2021-12-11",
 	})
 

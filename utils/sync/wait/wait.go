@@ -1,6 +1,5 @@
 package wait
 
-
 import (
 	"sync"
 	"time"
