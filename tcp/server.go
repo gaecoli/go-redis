@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gaecoli/interface/tcp"
-	"github.com/gaecoli/libs/logger"
+	"github.com/gaecoli/utils/logger"
 	"net"
 	"os"
 	"os/signal"

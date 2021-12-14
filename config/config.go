@@ -2,7 +2,7 @@ package config
 
 import (
 	"bufio"
-	"github.com/gaecoli/libs/logger"
+	"github.com/gaecoli/utils/logger"
 	"io"
 	"os"
 	"reflect"

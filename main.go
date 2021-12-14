@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gaecoli/config"
-	"github.com/gaecoli/libs/logger"
+	"github.com/gaecoli/utils/logger"
 	"github.com/gaecoli/tcp"
 	"os"
 )
